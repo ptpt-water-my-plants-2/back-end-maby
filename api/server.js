@@ -26,4 +26,22 @@ server.post('/api/users', async (req, res) => {
   res.status(201).json(await insertUser(req.body))
 })
 
+
+//home page
+server.get('/', (req, res) => {
+  res.status(200).json(
+      {
+          "status": 200,
+          "message": 'Welcome! Lets party with plants!',
+          "time": new Date().toLocaleTimeString(),
+      });
+})
+//catch all endpoint
+server.use('*', (req, res) => {
+  res.status(404).json({
+      message: 'not found',
+  })
+})
 module.exports = server
+
+// https://buildweek-plants.herokuapp.com/
