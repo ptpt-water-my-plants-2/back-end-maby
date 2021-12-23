@@ -6,6 +6,7 @@ const path = require('path')
 
 const authRouter = require('./auth/auth-router.js');
 const usersRouter = require('./users/users-router.js');
+const plantsRouter = require('./plants/plants-router.js');
 
 const server = express()
 server.use(express.json())
@@ -15,6 +16,7 @@ server.use(cors())
 server.use(express.static(path.join(__dirname, '../client')))
 server.use('/api/auth', authRouter);
 server.use('/api/users', usersRouter);
+server.use('/api/plants', plantsRouter);
 
 server.get('/', (req, res) => {
   res.status(200).json(

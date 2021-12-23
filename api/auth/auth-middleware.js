@@ -67,7 +67,7 @@ const validateBody = async(req, res, next ) => {
 
 function restricted(req, res, next) {
     const token = req.headers.authorization
-    console.log('token',token)
+    //console.log('token',token)
 
     if(token){ // Validate token
         jwt.verify(token,secrets.jwtSecret ,(err,decodedToken )=>{
