@@ -1,4 +1,7 @@
 const User = require('./auth-model.js')
+const jwt = require('jsonwebtoken');
+const secrets = require('../../config/secrets') 
+
 
 const checkUserExists = async(req, res, next ) => {
     try{
@@ -17,6 +20,26 @@ const checkUserExists = async(req, res, next ) => {
 }
 
 
+
+const validateregister = async(req, res, next ) => {
+    try{
+
+        const {firstName, lastName, username , password ,phoneNumber} =  req.body
+        if (!firstName || !lastName || !username || !password || !phoneNumber) {
+            return res.status(400).json({ message: "Complete all fields" })
+        // } else if(phoneNumber.length !== 10) {
+        // return res.status(400).json({ message: "Phone number must contain ten digits" })
+
+        } else if (password.length < 4) {
+            return res.status(400).json({ message: "Password must be 4 characters or longer" })
+        } else {
+            next()
+        }
+
+    } catch(err){
+        next(err)
+    }
+}
 
 const validateBody = async(req, res, next ) => {
     try{
@@ -41,7 +64,28 @@ const validateBody = async(req, res, next ) => {
 }
 
 
+
+function restricted(req, res, next) {
+    const token = req.headers.authorization
+    console.log('token',token)
+
+    if(token){ // Validate token
+        jwt.verify(token,secrets.jwtSecret ,(err,decodedToken )=>{
+            if(err) {
+                next({ status: 401, message:"token invalid"})
+            } else {
+                req.decodedJwt = decodedToken // return decoded token
+                next()
+            }
+        }) 
+    } else {
+        res.status(401).json({message: "token required"})
+    }
+}
+
 module.exports = {
-checkUserExists,
-validateBody
+    validateregister,
+    checkUserExists,
+    validateBody,
+    restricted,
 }

@@ -6,16 +6,22 @@ const User = require('./auth-model.js')
 const bcrypt = require('bcryptjs') // creates hash 
 const { BCRYPT_ROUNDS } = require('../../config')
 
-const { checkUserExists, validateBody } = require('./auth-middleware')
+const { checkUserExists, validateBody,validateregister} = require('./auth-middleware')
 
-router.post('/register',checkUserExists,validateBody,  async (req, res, next) => {
+router.post('/register',checkUserExists,validateregister,  async (req, res, next) => {
 
   try {
-    const { username , password} = req.body
+    
+    const { firstName, lastName, username, password ,phoneNumber} = req.body
     // bcrypting the password before saving
     const hash = bcrypt.hashSync(password, BCRYPT_ROUNDS)
     // never save the plain text password in the db
-    const user = { 'username': username , 'password':hash} 
+    const user = { 'firstName':firstName, 
+                  'lastName':lastName, 
+                  'username': username , 
+                  'password':hash , 
+                  'phoneNumber': phoneNumber
+                } 
 
     const NewUser = await User.add(user)
     res.status(201).json({'id': NewUser.user_id,

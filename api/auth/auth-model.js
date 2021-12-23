@@ -13,8 +13,8 @@ function findById(id) {
         .first()
 }
 
-async function add({ username, password }) {
-    const [user_id] = await db('users').insert({ username, password })
+async function add({firstName, lastName, username, password ,phoneNumber}) {
+    const [user_id] = await db('users').insert({ firstName, lastName, username, password ,phoneNumber})
     return findById(user_id)
 }
 
